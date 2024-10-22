@@ -1,0 +1,14 @@
+{
+    "sqltools.connections": [
+        {
+            "previewLimit": 50,
+            "server": "localhost",
+            "port": 5432,
+            "driver": "PostgreSQL",
+            "name": "sequelize-test",
+            "database": "sequelize_superheroes",
+            "username": "postgres",
+            "password": "9669"
+        }
+    ]
+}

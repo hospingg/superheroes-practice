@@ -5,6 +5,6 @@ const bodyParser = express.json();
 
 app.use(bodyParser)
 
-app.use('/api', )
+app.use('/api', rootRouter)
 
 module.exports = app;
