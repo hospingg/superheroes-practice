@@ -35,20 +35,6 @@ module.exports.getOne = async(req, res, next) =>{
         console.log(err)
     }
 }
-module.exports.updateOne = async(req, res, next) =>{
-    try{
-        const { params: {id} } = req;
-        const picture = await Picture.update({
-            where:{
-                id: id
-            }
-        })
-        res.status(200).send(picture)
-    }catch(err){
-        res.status(400).send('Something goes wrong')
-        console.log(err)
-    }
-}
 module.exports.deleteOne = async(req, res, next) =>{
     try{
         const { params: {id} } = req;

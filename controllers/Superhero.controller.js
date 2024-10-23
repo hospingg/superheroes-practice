@@ -1,12 +1,10 @@
 const { Superhero, Superpower, Picture } = require('../models');
-// const Picture = require('../models/Picture');
-const PictureController = require('./Picture.controller');
 
-module.exports.createOne = async (req, res, next) => {
+module.exports.createOne = async(req, res, next) => {
     try {
         const { nickName, realName, originDescription, catchPhrase, superpowers } = req.body;
+        const files = req.files;
 
-        // Створюємо героя
         const superhero = await Superhero.create({
             nickName,
             realName,
@@ -14,7 +12,16 @@ module.exports.createOne = async (req, res, next) => {
             catchPhrase,
         });
 
-        // Додаємо всі суперсили, які передані масивом
+        let pictures = [];
+        if (files && files.length > 0) {
+            pictures = await Promise.all(
+                files.map(file => Picture.create({
+                    superheroId: superhero.id,
+                    src: file.filename
+                }))
+            );
+        }
+
         if (superpowers && superpowers.length > 0) {
             const powerInstances = await Superpower.findAll({
                 where: {
@@ -22,16 +29,19 @@ module.exports.createOne = async (req, res, next) => {
                 },
             });
 
-            // Додаємо всі суперсили до героя
             await superhero.addSuperpowers(powerInstances);
         }
 
-        res.status(201).send({ data: superhero });
+        res.status(201).send({
+            superhero,
+            pictures
+        });
     } catch (err) {
         console.log(err);
         res.status(400).send('Something went wrong');
     }
 };
+
 
 module.exports.getAll = async (req, res, next) => {
     try {
@@ -93,28 +103,25 @@ module.exports.getOne = async (req, res, next) => {
 module.exports.updateOne = async (req, res, next) => {
     try {
         const { body, params: { id } } = req;
-        const { superpowers } = body; // Масив ідентифікаторів суперсил
-        const { files } = req; // Масив файлів картинок
+        const { superpowers } = body;
+        const { files } = req;
 
         const superhero = await Superhero.findByPk(id);
         if (!superhero) {
             return res.status(404).send('This superhero does not exist');
         }
 
-        // Оновлення даних супергероя
         await superhero.update(body);
 
-        // Оновлення суперсил
         if (superpowers?.length) {
             const powers = await Superpower.findAll({
                 where: {
                     id: superpowers
                 }
             });
-            await superhero.setSuperpowers(powers); // Заміна існуючих суперсил
+            await superhero.setSuperpowers(powers);
         }
 
-        // Додавання нових картинок
         if (files?.length) {
             const pictures = files.map(file => ({ src: file.filename, superheroId: superhero.id }));
             await Picture.bulkCreate(pictures);

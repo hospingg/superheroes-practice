@@ -18,7 +18,7 @@ const upload = multer({ storage });
 
 superheroRouter.post('/', upload.array('image', 10), SuperheroController.createOne); 
 superheroRouter.put('/:id', upload.array('image', 10), SuperheroController.updateOne);
-superheroRouter.get('?page&limit', SuperheroController.getAll);
+superheroRouter.get('/', SuperheroController.getAll);
 superheroRouter.get('/:id', SuperheroController.getOne);
 superheroRouter.delete('/:id', SuperheroController.deleteOne);
 

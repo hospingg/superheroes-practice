@@ -12,7 +12,7 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       src: {
-        type: Sequelize.STRING,
+        type: Sequelize.TEXT,
         allowNull: false
       },
       superheroId: {
