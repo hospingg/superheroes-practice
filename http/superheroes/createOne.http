@@ -2,8 +2,9 @@ POST http://localhost:5000/api/superhero/ HTTP/1.1
 Content-Type: application/json
 
 {
-    "nickName": "DeadPool",
+    "nickName": "DeadPool5",
     "realName": "Wade Wilson",
     "originDescription": "Bad guy",
-    "catchPhrase": "206 bones in the body"
+    "catchPhrase": "206 bones in the body",
+    "superpowers": [3, 4]
 }
